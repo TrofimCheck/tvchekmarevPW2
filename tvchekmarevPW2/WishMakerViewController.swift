@@ -27,16 +27,26 @@ final class WishMakerViewController: UIViewController {
         static let green: String = "Green"
         static let blue: String = "Blue"
         static let stackRadius: CGFloat = 20
-        static let stackBottom: CGFloat = -80
+        static let stackBottom: CGFloat = -150
         static let stackLeading: CGFloat = 20
         static let backgroundAlpha: CGFloat = 1
-        static let buttonTop: CGFloat = 20
+        static let toggleButtonTop: CGFloat = 10
+        static let toggleButtonTitle: String = "Toggle Sliders"
+        static let addWishButtonBackgroundColor: UIColor = .white
+        static let addWishButtonTitleColor: UIColor = .systemPink
+        static let addWishButtonHeight: CGFloat = 60
+        static let addWishButtonBottom: CGFloat = 30
+        static let addWishButtonSide: CGFloat = 20
+        static let addWishButtonText: String = "Add Wish"
+        static let addWishButtonRadius: CGFloat = 20
     }
     
     // MARK: - UI Elements
-    private var titleView = UILabel()
-    private var descriptionView = UILabel()
-    private let slidersStack = UIStackView()
+    private var titleView: UILabel = UILabel()
+    private var descriptionView: UILabel = UILabel()
+    private let slidersStack:UIStackView = UIStackView()
+    private let addWishButton: UIButton = UIButton(type: .system)
+    private let table: UITableView = UITableView(frame: .zero)
     
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -51,6 +61,7 @@ final class WishMakerViewController: UIViewController {
         configureDescription()
         configureSliders()
         configureToggleButton()
+        configureAddWishButton()
     }
     
     // MARK: - Title
@@ -118,20 +129,41 @@ final class WishMakerViewController: UIViewController {
     private func configureToggleButton() {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Toggle Sliders", for: .normal)
+        button.setTitle(Constants.toggleButtonTitle, for: .normal)
         view.addSubview(button)
 
         NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: slidersStack.bottomAnchor, constant: Constants.buttonTop),
+            button.topAnchor.constraint(equalTo: slidersStack.bottomAnchor, constant: Constants.toggleButtonTop),
             button.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
 
         button.addTarget(self, action: #selector(toggleSlidersVisibility), for: .touchUpInside)
     }
 
+    
+    // MARK: - Add Wish Button
+    private func configureAddWishButton() {
+        view.addSubview(addWishButton)
+        addWishButton.setHeight(Constants.addWishButtonHeight)
+        addWishButton.pinBottom(to: view, Constants.addWishButtonBottom)
+        addWishButton.pinHorizontal(to: view, Constants.addWishButtonSide)
+        
+        addWishButton.backgroundColor = Constants.addWishButtonBackgroundColor
+        addWishButton.setTitleColor(Constants.addWishButtonTitleColor, for: .normal)
+        addWishButton.setTitle(Constants.addWishButtonText, for: .normal)
+        
+        addWishButton.layer.cornerRadius = Constants.addWishButtonRadius
+        addWishButton.addTarget(self, action: #selector(addWishButtonPressed), for: .touchUpInside)
+    }
+    
     // MARK: - Actions
     @objc
     private func toggleSlidersVisibility() {
         slidersStack.isHidden.toggle()
+    }
+    
+    @objc
+    private func addWishButtonPressed() {
+        present(WishStoringViewController(), animated: true)
     }
 }
